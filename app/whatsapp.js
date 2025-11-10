@@ -1,5 +1,5 @@
 const { Client, LocalAuth } = require("whatsapp-web.js");
-const qrcode = require("qrcode-terminal");
+const QRCode = require("qrcode"); // 👈 novo pacote para gerar imagem legível
 
 let client;
 let ready = false;
@@ -11,7 +11,7 @@ function startWhatsApp() {
       dataPath: "./.wwebjs_auth"
     }),
     puppeteer: {
-      headless: true, 
+      headless: true, // Render não tem interface gráfica
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
@@ -25,10 +25,16 @@ function startWhatsApp() {
     }
   });
 
-  client.on("qr", (qr) => {
+  // Quando gerar o QR
+  client.on("qr", async (qr) => {
     console.clear();
     console.log("📲 Escaneie o QR code com o WhatsApp do seu celular:");
-    qrcode.generate(qr, { small: true });
+
+    // Gera uma URL base64 que pode ser aberta no navegador
+    const qrUrl = await QRCode.toDataURL(qr);
+    console.log("\n👉 Copie e cole o link abaixo no seu navegador:\n");
+    console.log(qrUrl);
+    console.log("\nEle exibirá o QR Code para escanear.\n");
   });
 
   client.on("authenticated", () => {
