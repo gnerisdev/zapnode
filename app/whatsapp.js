@@ -11,11 +11,15 @@ function startWhatsApp() {
       dataPath: "./.wwebjs_auth"
     }),
     puppeteer: {
-      headless: false, // ⚠️ mantenha false até conectar pelo menos 1 vez
+      headless: true, 
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
         "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--single-process",
         "--disable-gpu"
       ]
     }
